@@ -4,17 +4,20 @@ from pprint import pprint
 from ring_doorbell import Ring, Auth
 from oauthlib.oauth2 import MissingTokenError
 import getpass
+import auth
 
 
 def main():
-	
-	while True:
+	Auth = auth.createAuthObj()
+	if Auth is None:
+		print(1)
+	# while True:
 
-		time.sleep(3)
+	# 	time.sleep(3)
 
 
-# if __name__ == main():
-# 	main()
+if __name__ == main():
+	main()
 
 
 
