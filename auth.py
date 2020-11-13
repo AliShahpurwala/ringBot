@@ -5,6 +5,7 @@ from oauthlib.oauth2 import MissingTokenError, AccessDeniedError
 import getpass
 import requests
 from requests import ConnectionError
+import datetime
 USERNAME = "ali.murtaza.am@gmail.com"
 
 def call2FA():
@@ -16,7 +17,7 @@ def createAuthObj():
 	try:
 		requests.get('https://docs.python.org/3/')
 	except ConnectionError:
-		print('Connection Error Occurred. Check your internet status.')
+		print('[' + str(datetime.datetime.now()) + '] ' + 'Connection Error Occurred. Check your internet status.')
 		return None
 	password = getpass.getpass("Password: ")
 	auth = Auth("Project01")
@@ -26,10 +27,10 @@ def createAuthObj():
 		try:
 			auth.fetch_token(USERNAME, password, call2FA())
 		except:
-			print('Incorrect or expired 2FA code')
+			print('[' + str(datetime.datetime.now()) + '] ' + 'Incorrect or expired 2FA code')
 			return None
 	except AccessDeniedError:
-		print("Incorrect Password")
+		print('[' + str(datetime.datetime.now()) + '] ' + "Incorrect Password")
 		return None
 	return auth
 
