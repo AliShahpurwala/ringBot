@@ -21,9 +21,11 @@ def main():
 	devices = ring.devices()
 
 	frontDoorCam = devices['doorbots'][0]
-	for event in frontDoorCam.history(limit=15):
-		print('ID:       %s' % event['id'])
-		print('When:     %s' % event['created_at'])
+	with open("conf.json", "r") as confFile:
+		confJson = confFile.read()
+
+	conf = json.loads(confJson)
+	
 
 	# while True:
 
