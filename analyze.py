@@ -4,6 +4,8 @@ import json
 import os
 import datetime
 import copy
+import pprint
+
 frameScanTemplate = {
 	"frameNumber": -1,
 	"facesFoundNum": -1,
@@ -29,10 +31,14 @@ def analyze(lastEventId):
 		confJson = confFile.read()
 	conf = json.loads(confJson)
 	if (runAnalyzeCheck(lastEventId)):
-		createAnalyzeFrames()
+		detectedFaceFrames = createAnalyzeFrames()
+		detectedFaceFrames = sortFramesByDetectedFaces(detectedFaceFrames)
+		print(detectedFaceFrames)
 		conf['lastVideoIdAnalyzed'] = lastEventId
 		with open('conf.json', 'w') as outFile:
 			json.dump(conf, outFile)
+		os.system('rm frame*')
+		os.system('rm last_event.mp4')
 		return True
 	else:
 		os.system('rm last_event.mp4')
@@ -71,6 +77,22 @@ def createAnalyzeFrames():
 	
 	del(result)
 
-
 	print('[' + str(datetime.datetime.now()) + '] Completed analysis of video. Sending for verification.')
-	os.system('rm frame*')
+
+
+	return detectedFaceFrames
+
+
+def sortFramesByDetectedFaces(detectedFaceFrames):
+    n = len(detectedFaceFrames) 
+  
+    # Traverse through all array elements 
+    for i in range(n-1): 
+    # range(n) also work but outer loop will repeat one time more than needed. 
+  
+        # Last i elements are already in place 
+        for j in range(0, n-i-1): 
+            if detectedFaceFrames[j]['facesFoundNum'] > detectedFaceFrames[j+1]['facesFoundNum'] : 
+                detectedFaceFrames[j], detectedFaceFrames[j+1] = detectedFaceFrames[j+1], detectedFaceFrames[j]
+
+    return detectedFaceFrames
